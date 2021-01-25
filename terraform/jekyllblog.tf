@@ -1,20 +1,14 @@
-/*--
-docker run --rm -it -p 80:4000 jekyll/builder:$JEKYLL_VERSION bash -c \
-  "git clone https://github.com/IBM-Cloud/kubernetes-cos-pvc.git; cd kubernetes-cos-pvc/example/jekyllblog/myblog; mkdir _site; jekyll serve"
---*/
-
-
 locals {
-  blog_pvc_name = "${var.basename}-blog"
+  jekyllblog_pvc_name = "${var.basename}-jekyllblog"
 }
-resource "kubernetes_persistent_volume_claim" "blog" {
+resource "kubernetes_persistent_volume_claim" "jekyllblog" {
   metadata {
-    name = local.blog_pvc_name
+    name = local.jekyllblog_pvc_name
     annotations = {
       "ibm.io/auto-create-bucket" : "true"
       "ibm.io/auto-delete-bucket" : "false"
       "ibm.io/auto_cache" : "true"
-      # "ibm.io/bucket" : "${var.basename}-blog"
+      # "ibm.io/bucket" : "${var.basename}-jekyllblog"
       "ibm.io/secret-name" : kubernetes_secret.cos.metadata[0].name
       "ibm.io/set-access-policy" : "false"
     }
@@ -30,11 +24,11 @@ resource "kubernetes_persistent_volume_claim" "blog" {
   }
 }
 
-resource "kubernetes_deployment" "blog" {
+resource "kubernetes_deployment" "jekyllblog" {
   metadata {
-    name = "${var.basename}blog-deployment"
+    name = "${var.basename}jekyllblog-deployment"
     labels = {
-      app = "${var.basename}blog"
+      app = "${var.basename}jekyllblog"
     }
   }
 
@@ -43,21 +37,21 @@ resource "kubernetes_deployment" "blog" {
 
     selector {
       match_labels = {
-        app = "${var.basename}blog"
+        app = "${var.basename}jekyllblog"
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "${var.basename}blog"
+          app = "${var.basename}jekyllblog"
         }
       }
 
       spec {
         container {
-          name    = "blog"
-          image   = "jekyll/builder:3.8"
+          name    = "jekyllblog"
+          image   = var.imagefqn_jekyll
           command = ["sh", "-c", "git clone https://github.com/IBM-Cloud/kubernetes-cos-pvc.git; cd kubernetes-cos-pvc/example/jekyllblog/myblog; mkdir _site; jekyll serve"]
           port {
             container_port = "4000"
@@ -70,7 +64,7 @@ resource "kubernetes_deployment" "blog" {
         volume {
           name = "volname"
           persistent_volume_claim {
-            claim_name = local.blog_pvc_name
+            claim_name = local.jekyllblog_pvc_name
           }
         }
       }
@@ -78,11 +72,11 @@ resource "kubernetes_deployment" "blog" {
   }
 }
 
-resource "kubernetes_service" "blog" {
+resource "kubernetes_service" "jekyllblog" {
   metadata {
-    name = "${var.basename}blog-service"
+    name = "${var.basename}jekyllblog-service"
     labels = {
-      app = "${var.basename}blog"
+      app = "${var.basename}jekyllblog"
     }
   }
   spec {
@@ -90,11 +84,7 @@ resource "kubernetes_service" "blog" {
       port = 4000
     }
     selector = {
-      app = "${var.basename}blog"
+      app = "${var.basename}jekyllblog"
     }
   }
 }
-
-
-/*------------------------
-  ------------------------*/

@@ -7,7 +7,14 @@ variable "basename" {
 variable "resource_group" {
 }
 
-variable "imagefqn" {
+variable "imagefqn_nginx" {
+}
+
+variable "imagefqn_jekyll" {
+}
+
+# there are some dependencies on cluster creation must use us-south, look for dal10
+variable "region" {
 }
 
 variable "cloudobjectstorage_plan" {
@@ -16,10 +23,5 @@ variable "cloudobjectstorage_plan" {
 
 variable "cloudobjectstorage_location" {
   default = "global"
-}
-
-# there are some dependencies on cluster creation must use us-south, look for dal10
-variable "region" {
-  default = "us-south"
 }
 

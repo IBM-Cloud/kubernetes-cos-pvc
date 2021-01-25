@@ -13,7 +13,7 @@ data "ibm_container_cluster_config" "cluster" {
 # ----------------------
 # a cloud object storage, COS, resource and two keys (service credentials): manager and writer
 resource "ibm_resource_instance" "objectstorage" {
-  name              = "objectstorage"
+  name              = "${var.basename}-cos"
   service           = "cloud-object-storage"
   plan              = var.cloudobjectstorage_plan
   location          = var.cloudobjectstorage_location
@@ -57,15 +57,20 @@ resource "kubernetes_secret" "cos" {
   }
 }
 
+locals {
+  pvc_nginx_claim_name = var.basename
+}
+
 resource "kubernetes_persistent_volume_claim" "pvc" {
   metadata {
-    name = var.basename
+    name = local.pvc_nginx_claim_name
     annotations = {
       "ibm.io/auto-create-bucket" : "true"
       "ibm.io/auto-delete-bucket" : "false"
       "ibm.io/auto_cache" : "true"
-      "ibm.io/bucket" : "${var.basename}-nginx002"
+      "ibm.io/bucket" : "${var.basename}-nginx"
       "ibm.io/secret-name" : kubernetes_secret.cos.metadata[0].name
+      "ibm.io/set-access-policy" : "true"
     }
   }
   spec {
@@ -79,7 +84,7 @@ resource "kubernetes_persistent_volume_claim" "pvc" {
   }
 }
 
-resource "kubernetes_deployment" "deployment" {
+resource "kubernetes_deployment" "nginx" {
   metadata {
     name = "${var.basename}nginx-deployment"
     labels = {
@@ -106,7 +111,7 @@ resource "kubernetes_deployment" "deployment" {
       spec {
         container {
           name    = "nginx"
-          image   = var.imagefqn
+          image   = var.imagefqn_nginx
           command = ["sh", "-c", "echo '#Success' > /usr/share/nginx/html/index.html ; exec nginx -g 'daemon off;'"]
           port {
             container_port = "80"
@@ -119,7 +124,7 @@ resource "kubernetes_deployment" "deployment" {
         volume {
           name = "volname"
           persistent_volume_claim {
-            claim_name = var.basename
+            claim_name = local.pvc_nginx_claim_name
           }
         }
       }
@@ -169,11 +174,11 @@ resource "kubernetes_ingress" "example_ingress" {
       }
     }
     rule {
-      host = "blog.${data.ibm_container_vpc_cluster.cluster.ingress_hostname}"
+      host = "jekyllblog.${data.ibm_container_vpc_cluster.cluster.ingress_hostname}"
       http {
         path {
           backend {
-            service_name = kubernetes_service.blog.metadata[0].name
+            service_name = kubernetes_service.jekyllblog.metadata[0].name
             service_port = 4000
           }
         }
@@ -203,4 +208,3 @@ output cluster_id {
 output basename {
   value = var.basename
 }
-

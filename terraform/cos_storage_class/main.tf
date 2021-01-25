@@ -1,6 +1,4 @@
-variable dcname {
-  default = "dal10"
-}
+variable dcname {}
 
 resource "helm_release" "ibm_helm" {
   name = "ibm-helm"

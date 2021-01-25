@@ -2,20 +2,28 @@
 set -e
 set -o pipefail
 
+if ! [ $IBMCR = "true" ]; then
+  echo skipping ibm container registry because environment variable IBMCR not true
+  exit 0
+fi
+
 # include common names
 source $(dirname "$0")/names.sh
 
-[ x$IMAGE == x ] && exit 1
-
-
-ibmcloud cr login
+# ibmcloud cr login
 
 if ! ibmcloud cr namespace-add $CR_NAMESPACE; then
   echo assuming namespace already exists
 fi
 
-echo docker pull push $IMAGE_FQN
-docker pull $IMAGE
-docker tag $IMAGE $IMAGE_FQN
-docker push $IMAGE_FQN
+echo docker pull push $IMAGE_FQN_NGINX
+docker pull $IMAGE_NGINX
+docker tag $IMAGE_NGINX $IMAGE_FQN_NGINX
+docker push $IMAGE_FQN_NGINX
+ibmcloud cr images
+
+echo docker pull push $IMAGE_FQN_JEKYLL
+docker pull $IMAGE_JEKYLL
+docker tag $IMAGE_JEKYLL $IMAGE_FQN_JEKYLL
+docker push $IMAGE_FQN_JEKYLL
 ibmcloud cr images

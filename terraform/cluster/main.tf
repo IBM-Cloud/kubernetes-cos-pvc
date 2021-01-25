@@ -1,13 +1,11 @@
 variable basename {}
 variable resource_group_id {}
+variable zone {}
 variable cluster_worker_count {
   default = 2
 }
 variable cluster_flavor {
   default =  "cx2.2x4"
-}
-variable zone {
-  default = "us-south-1"
 }
 variable kube_version {
   default = "1.19"

@@ -25,7 +25,7 @@ resource "kubernetes_deployment" "jekyllnginx" {
       spec {
         container {
           name    = "jekyllnginx"
-          image   = var.imagefqn
+          image   = var.imagefqn_nginx
           command = ["sh", "-c", "cd /usr/share/nginx; rm -rf html; ln -s /blog/kubernetes-cos-pvc/example/jekyllblog/myblog/_site html; exec nginx -g 'daemon off;'"]
           port {
             container_port = "80"
@@ -38,7 +38,7 @@ resource "kubernetes_deployment" "jekyllnginx" {
         volume {
           name = "volname"
           persistent_volume_claim {
-            claim_name = var.basename
+            claim_name = local.jekyllblog_pvc_name
           }
         }
       }
@@ -62,5 +62,3 @@ resource "kubernetes_service" "jekyllnginx" {
     }
   }
 }
-
-
