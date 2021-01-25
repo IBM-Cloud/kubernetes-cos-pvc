@@ -1,0 +1,23 @@
+credentials.json
+config.sh
+#vim swap files
+[._]*.sw[a-p]
+local
+dataVolume.json
+node_modules
+*.done
+*.input.json
+terraform.tfvars
+terraform.tfstate.lock.info
+*.tfstate
+*.tfstate.backup
+.terraform*
+resources.sh
+export
+*.vhd
+*.qcow2
+credentials.json
+config/
+*.tfvars
+*.plan
+local.env
