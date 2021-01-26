@@ -2,11 +2,11 @@ data "ibm_resource_group" "group" {
   name = var.resource_group
 }
 data "ibm_container_vpc_cluster" "cluster" {
-  name  = local.cluster_name
+  name  = var.cluster_name
   resource_group_id = data.ibm_resource_group.group.id
 }
 data "ibm_container_cluster_config" "cluster" {
-  cluster_name_id = local.cluster_name
+  cluster_name_id = var.cluster_name
   admin = true
 }
 
@@ -62,13 +62,14 @@ locals {
 }
 
 resource "kubernetes_persistent_volume_claim" "pvc" {
+  depends_on = [null_resource.cos_storage_class]
   metadata {
     name = local.pvc_nginx_claim_name
     annotations = {
       "ibm.io/auto-create-bucket" : "true"
       "ibm.io/auto-delete-bucket" : "false"
       "ibm.io/auto_cache" : "true"
-      "ibm.io/bucket" : "${var.basename}-nginx"
+      "ibm.io/bucket" : "${var.basename}-nginx-basic
       "ibm.io/secret-name" : kubernetes_secret.cos.metadata[0].name
       "ibm.io/set-access-policy" : "true"
     }
@@ -208,3 +209,7 @@ output cluster_id {
 output basename {
   value = var.basename
 }
+output bucket_pv {
+  value = kubernetes_persistent_volume_claim.pvc.spec[0].volume_name
+}
+

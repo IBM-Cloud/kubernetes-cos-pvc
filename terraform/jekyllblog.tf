@@ -2,6 +2,7 @@ locals {
   jekyllblog_pvc_name = "${var.basename}-jekyllblog"
 }
 resource "kubernetes_persistent_volume_claim" "jekyllblog" {
+  depends_on = [null_resource.cos_storage_class]
   metadata {
     name = local.jekyllblog_pvc_name
     annotations = {

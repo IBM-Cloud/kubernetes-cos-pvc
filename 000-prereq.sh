@@ -16,5 +16,6 @@ echo '>>> jq required'
 jq --version
 
 echo '>>> kubectl required'
-kubectl version
+kubectl version --client=true
 
+echo '>>> Prerequisites met'

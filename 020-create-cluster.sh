@@ -5,14 +5,14 @@ set -o pipefail
 # include common names
 source $(dirname "$0")/names.sh
 
+echo '>>>' terraform create cluster
 (
-  cd terraform
+  cd cluster
   cat > terraform.tfvars <<EOF
   resource_group = "$RESOURCE_GROUP"
   region = "$REGION"
   basename = "$BASENAME"
-  imagefqn_nginx = "$IMAGE_FQN_NGINX"
-  imagefqn_jekyll = "$IMAGE_FQN_JEKYLL"
+  cluster_name = "$CLUSTER_NAME"
 EOF
   terraform init
   terraform apply -auto-approve

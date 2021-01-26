@@ -4,6 +4,9 @@ variable "ibmcloud_api_key" {
 variable "basename" {
 }
 
+variable "cluster_name" {
+}
+
 variable "resource_group" {
 }
 
@@ -13,7 +16,6 @@ variable "imagefqn_nginx" {
 variable "imagefqn_jekyll" {
 }
 
-# there are some dependencies on cluster creation must use us-south, look for dal10
 variable "region" {
 }
 

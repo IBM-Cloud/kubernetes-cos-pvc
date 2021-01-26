@@ -10,7 +10,6 @@ esac
 CR_NAMESPACE=$BASENAME
 
 # cluster
-CLUSTER_NAME=$BASENAME-cluster
 function clusterIngressHostName(){
   ibmcloud ks cluster get --cluster $CLUSTER_NAME --output json | jq -r '.ingress.hostname'
 }
