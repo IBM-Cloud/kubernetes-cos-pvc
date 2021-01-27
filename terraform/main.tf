@@ -69,7 +69,7 @@ resource "kubernetes_persistent_volume_claim" "pvc" {
       "ibm.io/auto-create-bucket" : "true"
       "ibm.io/auto-delete-bucket" : "false"
       "ibm.io/auto_cache" : "true"
-      "ibm.io/bucket" : "${var.basename}-nginx-basic
+      "ibm.io/bucket" : "${var.basename}-nginx-basic"
       "ibm.io/secret-name" : kubernetes_secret.cos.metadata[0].name
       "ibm.io/set-access-policy" : "true"
     }
