@@ -8,6 +8,8 @@ case $REGION in
 esac
 
 CR_NAMESPACE=$BASENAME
+CLOUDOBJECTSTORAGE_NAME=$BASENAME-cos
+BUCKET_NAME=$BASENAME-nginx-basic
 
 # cluster
 function clusterIngressHostName(){
