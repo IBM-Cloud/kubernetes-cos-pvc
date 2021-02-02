@@ -4,7 +4,7 @@ data "ibm_resource_group" "group" {
 
 locals {
   resource_group_id = data.ibm_resource_group.group.id
-  zone = "${var.region}-1"
+  zone              = "${var.region}-1"
 }
 
 resource "ibm_is_vpc" "vpc" {
@@ -24,7 +24,7 @@ resource "ibm_is_public_gateway" "public" {
 
 resource "ibm_is_subnet" "subnet11" {
   name                     = "${var.basename}-1"
-  resource_group = local.resource_group_id
+  resource_group           = local.resource_group_id
   vpc                      = ibm_is_vpc.vpc.id
   zone                     = local.zone
   total_ipv4_address_count = 256
@@ -46,6 +46,6 @@ resource "ibm_container_vpc_cluster" "cluster" {
 }
 
 # ----------------------
-output name {
+output "name" {
   value = ibm_container_vpc_cluster.cluster.name
 }

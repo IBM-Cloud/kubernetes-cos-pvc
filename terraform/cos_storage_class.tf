@@ -1,4 +1,4 @@
-resource null_resource cos_storage_class {
+resource "null_resource" "cos_storage_class" {
   depends_on = [helm_release.ibm_helm] # comment this out and all the stuff below to avoid installing cos storage class
 }
 
@@ -14,7 +14,7 @@ provider "helm" {
 }
 
 resource "helm_release" "ibm_helm" {
-  name = "ibm-helm"
+  name       = "ibm-helm"
   repository = "https://raw.githubusercontent.com/IBM/charts/master/repo/ibm-helm"
   chart      = "ibm-object-storage-plugin"
   set {

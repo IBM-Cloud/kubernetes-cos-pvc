@@ -2,12 +2,12 @@ data "ibm_resource_group" "group" {
   name = var.resource_group
 }
 data "ibm_container_vpc_cluster" "cluster" {
-  name  = var.cluster_name
+  name              = var.cluster_name
   resource_group_id = data.ibm_resource_group.group.id
 }
 data "ibm_container_cluster_config" "cluster" {
   cluster_name_id = var.cluster_name
-  admin = true
+  admin           = true
 }
 
 # ----------------------
@@ -200,16 +200,16 @@ resource "kubernetes_ingress" "example_ingress" {
 }
 
 # ----------------------
-output cluster_name {
+output "cluster_name" {
   value = data.ibm_container_vpc_cluster.cluster.name
 }
-output cluster_id {
+output "cluster_id" {
   value = data.ibm_container_vpc_cluster.cluster.id
 }
-output basename {
+output "basename" {
   value = var.basename
 }
-output bucket_pv {
+output "bucket_pv" {
   value = kubernetes_persistent_volume_claim.pvc.spec[0].volume_name
 }
 
