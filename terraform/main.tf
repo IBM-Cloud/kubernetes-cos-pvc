@@ -40,7 +40,6 @@ resource "ibm_resource_key" "cos_writer" {
 
 # ----------------------
 provider "kubernetes" {
-  load_config_file = true
   config_path      = data.ibm_container_cluster_config.cluster.config_file_path
 }
 

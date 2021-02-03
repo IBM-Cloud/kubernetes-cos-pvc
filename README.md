@@ -1,31 +1,20 @@
-# Blog Post
-Run each of the commands in order
+# Kubernetes Persistent Volumes Backed by IBM Cloud Object Storage Buckets
 
-cp teamplate.localvars localvars
+When you imagine a file system, you are probably thinking of the block storage provided by disk drives. Object storage buckets can also be used for file system volumes on Kuberrnetes and might fit well into your application. For example, buckets can be managed outside of the application with a variety of tools and the IBM Cloud Console. Getting data in and out is a breeze.
 
-000-prereq.sh - prereq check and local.env check
+![architecture](./architecture.png)
 
-010-container-registry.sh - optionally create an ibm cloud container registry namespace to hold
-Container images can come from public registries (hub.docker.com) or from the ibm container registry.  A VPC public gateway is required to connect to a public registry.  The ibm container registry in this example is in the same region as the the kubernetes cluster and accessed over a regional ip address.
+This repository contains scripts and terraform to create all of the resources.  Basic steps are:
+- cp template.local.env local.env
+- edit local.env; #make suggested changes
+- source local.env
+- ./000-prereq.sh
+- ./010-container-registry.sh
+- ./020-create-cluster.sh
+- ./025-create-resources.sh
+- ./030-test.sh
+- ./040-cleanup.sh
 
+The blog article related to this repo can be found at:
 
-020-create-resources.sh to install the following
-- kubernetes cluster - see commments in terraform/cluster.tf to reuse an existing cluster
-- COS storage classes - see terraform/cos_storage_class.tf to use existing storage classes supporting authorized IPs
-- COS instance
-- kubernetes secrets to access the COS instance
-- pvc - COS bucket to be automatically created on first use and initialized with authorized IP access for the vpc of cluster
-- deployment for nginx with pod spec for the bucket
-- service for the deployment
-- ingress for the service
-- jekyllblog - optional, pvc to hold the contents of a jekyll blog static website generator
-- jekyllnginx - optionalk, uses the jekyllblog pvc to host the static web site with nginx
-
-030-test.sh
-- checks the results expected from nginx deployment
-- displays the url for the jekyll blog and jekyll nginx deployments
-
-040-clean-up.sh - clean up stuff from previous steps
-- all stuff in 020-create-resource
-- container registry namespace
-
+https://www.ibm.com/cloud/blog/kubernetes-persistent-volumes-backed-by-ibm-cloud-object-storage-buckets
