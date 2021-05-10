@@ -17,6 +17,7 @@ resource "helm_release" "ibm_helm" {
   name       = "ibm-helm"
   repository = "https://raw.githubusercontent.com/IBM/charts/master/repo/ibm-helm"
   chart      = "ibm-object-storage-plugin"
+  version    = "2.0.7" 
   set {
     name  = "dcname"
     value = var.dcname
