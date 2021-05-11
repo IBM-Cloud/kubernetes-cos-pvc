@@ -18,6 +18,7 @@ echo '>>>' terraform destroy kubernetes cluster
 
 
 if [ $IBMCR = "true" ]; then
+  ibmcloud login --apikey $TF_VAR_ibmcloud_api_key -g $RESOURCE_GROUP -r $REGION
   echo '>>> remove container regisgtry namespace'
   ibmcloud cr namespace-rm $CR_NAMESPACE --force
 fi

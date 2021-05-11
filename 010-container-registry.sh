@@ -6,6 +6,7 @@ if ! [ $IBMCR = "true" ]; then
   echo skipping ibm container registry because environment variable IBMCR not true
   exit 0
 fi
+ibmcloud login --apikey $TF_VAR_ibmcloud_api_key -g $RESOURCE_GROUP -r $REGION
 
 # include common names
 source $(dirname "$0")/names.sh

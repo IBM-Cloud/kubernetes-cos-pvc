@@ -6,8 +6,9 @@ set -o pipefail
 source $(dirname "$0")/names.sh
 echo $IMAGE_FQN_NGINX - image
 
-echo '>>> ibmcloud required, setting resource group'
-ibmcloud target -g $RESOURCE_GROUP
+echo '>>> ibmcloud required, setting apipkey, resource group and region'
+ibmcloud login --apikey $TF_VAR_ibmcloud_api_key -g $RESOURCE_GROUP -r $REGION
+ibmcloud cr login
 
 # expecting ks plugin installed
 ibmcloud ks help > /dev/null

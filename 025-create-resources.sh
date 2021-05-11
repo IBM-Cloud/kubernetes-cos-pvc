@@ -5,6 +5,8 @@ set -o pipefail
 # include common names
 source $(dirname "$0")/names.sh
 
+ibmcloud login --apikey $TF_VAR_ibmcloud_api_key -g $RESOURCE_GROUP -r $REGION
+
 echo '>>>' initializing kubectl for the cluster $CLUSTER_NAME
 ibmcloud ks cluster config --cluster $CLUSTER_NAME
 

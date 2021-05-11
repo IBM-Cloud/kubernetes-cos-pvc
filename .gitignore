@@ -11,7 +11,7 @@ terraform.tfvars
 terraform.tfstate.lock.info
 *.tfstate
 *.tfstate.backup
-.terraform*
+.terraform
 resources.sh
 export
 *.vhd
